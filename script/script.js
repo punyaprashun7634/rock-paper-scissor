@@ -1,6 +1,10 @@
+let resetBtn = document.querySelector('.reset');
+let playAgain = document.querySelector('.play-again');
+let choices = document.querySelectorAll('.fa-regular');
+let statusText = document.querySelector('.game-status');
 
 let options = ['Rock', 'Paper', 'Scissor'];
-let humanChoice = 'Rock'
+let humanChoice = ""
 
 let currGame = new Map();
 
@@ -24,7 +28,7 @@ const getName = (value)=>{
         }
     }
 }
-let getWinner = ()=>{
+const getWinner = ()=>{
     currGame.set("Human", humanChoice);
     let computerChoice = options[Math.floor(Math.random()*options.length)]
     currGame.set("Computer", computerChoice);
@@ -39,7 +43,25 @@ let getWinner = ()=>{
         return false;
 }
 
-let result = getWinner();
-if(result) console.log(result);
-else console.log("Draw!!");
+const updateStatus = ()=>{
+    let winner = getWinner();
+    statusText.style.display = 'block';
+    if(!winner) statusText.innerHTML = "It's Draw!!"
+    else{
+        let count = document.querySelector(`.${winner}-count`);
+        count.innerHTML++;
+        statusText.innerHTML = `Winner is ${winner}`;
+    }
+}
+
+choices.forEach((choice)=>{
+    choice.addEventListener('click', ()=>{
+        if(!humanChoice){
+            humanChoice = choice.className.split(" ")[0];
+            choice.style.color = "red";
+            
+        }
+        updateStatus();
+    })
+})
 
